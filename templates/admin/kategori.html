@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block judul %}Kategori{% endblock %}
+
+{% block isi %}
+<div class="judul-halaman">
+  <h1>Master Kategori</h1>
+  <a class="tombol" href="/admin/kategori/tambah">Tambah Kategori</a>
+</div>
+
+<div class="kartu gulir">
+  <table>
+    <tr><th>Nama kategori</th><th>Deskripsi</th><th class="kanan">Jumlah layanan</th><th>Aksi</th></tr>
+    {% for k in data %}
+    <tr>
+      <td>{{ k.nama_kategori }}</td>
+      <td>{{ k.deskripsi }}</td>
+      <td class="kanan">{{ k.jumlah_layanan }}</td>
+      <td>
+        <div class="aksi-baris">
+          <a class="tombol abu mini" href="/admin/kategori/{{ k.id }}/edit">Edit</a>
+          <form action="/admin/kategori/{{ k.id }}/hapus" method="post" data-nama="{{ k.nama_kategori }}"
+                onsubmit="return confirm('Hapus kategori ' + this.dataset.nama + '?')">
+            <button class="tombol bahaya mini">Hapus</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="kecil">Belum ada kategori.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16204a">
+  <title>{% block judul %}{% endblock %} | {{ NAMA_APLIKASI }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+{# Logo: huruf W, strip kuning sebagai tanda hubung, lalu "allet". #}
+{% macro logo() %}W<span class="strip"><span class="tersembunyi">-</span></span>allet{% endmacro %}
+
+{# Satu tautan menu. Menu yang sedang dibuka mendapat class "aktif". #}
+{% macro menu(alamat, label) %}
+  {% set jalur = request.url.path %}
+  <a href="{{ alamat }}"
+     {% if jalur == alamat or (alamat != "/" and jalur.startswith(alamat + "/")) %}class="aktif" aria-current="page"{% endif %}>{{ label }}</a>
+{% endmacro %}
+
+{% if user %}
+<div class="rangka">
+  <aside class="sisi">
+    <a class="merek" href="/">{{ logo() }}</a>
+    <nav>
+      {{ menu("/", "Dashboard") }}
+      {% if user.role == "admin" %}
+        {{ menu("/admin/pengguna", "Pengguna") }}
+        {{ menu("/admin/kategori", "Kategori") }}
+        {{ menu("/admin/layanan", "Layanan") }}
+        {{ menu("/admin/metode", "Metode Isi Saldo") }}
+      {% else %}
+        {{ menu("/topup", "Isi Saldo") }}
+        {{ menu("/kirim", "Kirim") }}
+        {{ menu("/bayar", "Bayar") }}
+      {% endif %}
+      {{ menu("/laporan", "Laporan") }}
+    </nav>
+    <div class="akun">
+      <a class="nama" href="/profil">{{ user.nama }}</a>
+      <a href="/logout">Keluar</a>
+    </div>
+  </aside>
+{% else %}
+<div class="tamu">
+  <section class="tamu-merek">
+    <div class="merek">{{ logo() }}</div>
+    <p>Isi saldo, kirim ke teman, dan bayar pulsa sampai kantin dari satu akun.</p>
+  </section>
+{% endif %}
+
+  <main class="{{ 'isi' if user else 'tamu-form' }} {% block lebar %}{% endblock %}">
+    {% if pesan %}
+      <div class="pesan {{ pesan.tipe }}" role="{{ 'alert' if pesan.tipe == 'gagal' else 'status' }}">{{ pesan.teks }}</div>
+    {% endif %}
+    {% block isi %}{% endblock %}
+  </main>
+</div>
+
+<script>
+  // Di layar HP menu bisa digeser ke samping. Geser otomatis ke menu yang sedang dibuka.
+  document.querySelector(".sisi nav .aktif")?.scrollIntoView({ inline: "center", block: "nearest" });
+</script>
+
+</body>
+</html>

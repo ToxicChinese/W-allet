@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block judul %}Layanan{% endblock %}
+
+{% block isi %}
+<div class="judul-halaman">
+  <h1>Master Layanan</h1>
+  <a class="tombol" href="/admin/layanan/tambah">Tambah Layanan</a>
+</div>
+
+<div class="kartu gulir">
+  <table>
+    <tr><th>Nama layanan</th><th>Kategori</th><th class="kanan">Biaya admin</th><th>Status</th><th>Aksi</th></tr>
+    {% for l in data %}
+    <tr>
+      <td>{{ l.nama_layanan }}</td>
+      <td>{{ l.nama_kategori }}</td>
+      <td class="kanan">{{ l.biaya_admin|rupiah }}</td>
+      <td>
+        {% if l.aktif %}<span class="lencana ya">Aktif</span>
+        {% else %}<span class="lencana tidak">Nonaktif</span>{% endif %}
+      </td>
+      <td>
+        <div class="aksi-baris">
+          <a class="tombol abu mini" href="/admin/layanan/{{ l.id }}/edit">Edit</a>
+          <form action="/admin/layanan/{{ l.id }}/hapus" method="post" data-nama="{{ l.nama_layanan }}"
+                onsubmit="return confirm('Hapus layanan ' + this.dataset.nama + '?')">
+            <button class="tombol bahaya mini">Hapus</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="kecil">Belum ada layanan.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

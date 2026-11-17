@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% set admin = user.role == "admin" %}
+{% set judul = "Laporan Transaksi" if admin else "Mutasi Saldo" %}
+{% block judul %}{{ judul }}{% endblock %}
+
+{% block isi %}
+<h1>{{ judul }}</h1>
+
+{% set alamat = "/laporan/mutasi" %}
+{% set pilih_jenis = true %}
+{% include "laporan/_periode.html" %}
+
+<div class="kartu">
+  <p>
+    <strong>{{ NAMA_APLIKASI }}</strong><br>
+    {% if not admin %}Pemilik akun: {{ user.nama }} ({{ user.no_hp }})<br>{% endif %}
+    Periode: {{ dari.strftime("%d-%m-%Y") }} s.d. {{ sampai.strftime("%d-%m-%Y") }}
+    {% if jenis %}, jenis: {{ LABEL_JENIS[jenis] }}{% endif %}
+  </p>
+
+  <div class="gulir">
+  <table>
+    <thead>
+      <tr>
+        <th>Waktu dan kode</th>
+        {% if admin %}<th>Pengguna</th>{% endif %}
+        <th>Jenis</th><th>Keterangan</th>
+        <th class="kanan">Masuk</th><th class="kanan">Keluar</th><th class="kanan">Saldo akhir</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in data %}
+      <tr>
+        <td class="rapat">{{ t.waktu|tanggal }}<div class="kecil">{{ t.id|kode }}</div></td>
+        {% if admin %}<td>{{ t.nama_pengguna }}</td>{% endif %}
+        <td class="rapat">{{ LABEL_JENIS[t.jenis] }}</td>
+        <td>{{ t|keterangan }}</td>
+        <td class="kanan hijau">{{ t.masuk|rupiah if t.masuk }}</td>
+        <td class="kanan">{{ t.keluar|rupiah if t.keluar }}</td>
+        <td class="kanan">{{ t.saldo_akhir|rupiah }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="{{ 7 if admin else 6 }}" class="kecil">Tidak ada transaksi pada periode ini.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if data %}
+    <tfoot>
+      <tr>
+        <td colspan="{{ 4 if admin else 3 }}">Total ({{ data|length }} baris)</td>
+        <td class="kanan">{{ total_masuk|rupiah }}</td>
+        <td class="kanan">{{ total_keluar|rupiah }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+  </div>
+</div>
+{% endblock %}

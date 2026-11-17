@@ -1,0 +1,26 @@
+{# Form pilih periode. Dipakai di mutasi.html dan rekap.html lewat include. #}
+<div class="kartu tidak-dicetak">
+  <form action="{{ alamat }}" method="get" class="saring">
+    <div>
+      <label for="dari">Dari tanggal</label>
+      <input type="date" id="dari" name="dari" value="{{ dari }}">
+    </div>
+    <div>
+      <label for="sampai">Sampai tanggal</label>
+      <input type="date" id="sampai" name="sampai" value="{{ sampai }}">
+    </div>
+    {% if pilih_jenis %}
+    <div>
+      <label for="jenis">Jenis</label>
+      <select id="jenis" name="jenis">
+        <option value="">Semua jenis</option>
+        {% for kunci, label in LABEL_JENIS.items() %}
+          <option value="{{ kunci }}" {% if jenis == kunci %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+    <button class="tombol">Tampilkan</button>
+    <button type="button" class="tombol abu" onclick="window.print()">Cetak / PDF</button>
+  </form>
+</div>

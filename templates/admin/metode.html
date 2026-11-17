@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block judul %}Metode Isi Saldo{% endblock %}
+
+{% block isi %}
+<div class="judul-halaman">
+  <h1>Master Metode Isi Saldo</h1>
+  <a class="tombol" href="/admin/metode/tambah">Tambah Metode</a>
+</div>
+
+<div class="kartu gulir">
+  <table>
+    <tr><th>Nama metode</th><th>Keterangan</th><th>Status</th><th>Aksi</th></tr>
+    {% for m in data %}
+    <tr>
+      <td>{{ m.nama_metode }}</td>
+      <td>{{ m.keterangan }}</td>
+      <td>
+        {% if m.aktif %}<span class="lencana ya">Aktif</span>
+        {% else %}<span class="lencana tidak">Nonaktif</span>{% endif %}
+      </td>
+      <td>
+        <div class="aksi-baris">
+          <a class="tombol abu mini" href="/admin/metode/{{ m.id }}/edit">Edit</a>
+          <form action="/admin/metode/{{ m.id }}/hapus" method="post" data-nama="{{ m.nama_metode }}"
+                onsubmit="return confirm('Hapus metode ' + this.dataset.nama + '?')">
+            <button class="tombol bahaya mini">Hapus</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="kecil">Belum ada metode isi saldo.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

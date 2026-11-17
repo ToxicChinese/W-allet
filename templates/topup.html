@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block judul %}Isi Saldo{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>Isi Saldo</h1>
+  <p class="kecil">Saldo sekarang: {{ user.saldo|rupiah }}</p>
+
+  <form action="/topup" method="post">
+    <label for="metode_id">Metode</label>
+    <select id="metode_id" name="metode_id" required>
+      {% for m in metode %}
+        <option value="{{ m.id }}">{{ m.nama_metode }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="nominal">Nominal (Rp)</label>
+    <input type="number" id="nominal" name="nominal" min="{{ batas[0] }}" max="{{ batas[1] }}" required>
+    <div class="cepat">
+      {% for pilihan in [20000, 50000, 100000, 200000] %}
+        <button type="button" class="tombol abu mini"
+                onclick="document.getElementById('nominal').value = {{ pilihan }}">{{ pilihan|rupiah }}</button>
+      {% endfor %}
+    </div>
+    <div class="kecil">Minimal {{ batas[0]|rupiah }}, maksimal {{ batas[1]|rupiah }}.</div>
+
+    <div class="tombol-form">
+      <button class="tombol">Isi Saldo</button>
+      <a class="tombol abu" href="/">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

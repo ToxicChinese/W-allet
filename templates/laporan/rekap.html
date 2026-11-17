@@ -1,0 +1,55 @@
+{# Dipakai dua laporan: rekap per kategori dan rekap per layanan. #}
+{% extends "base.html" %}
+{% block judul %}{{ judul }}{% endblock %}
+
+{% block isi %}
+<h1>{{ judul }}</h1>
+
+{% include "laporan/_periode.html" %}
+
+<div class="kartu">
+  <p>
+    <strong>{{ NAMA_APLIKASI }}</strong><br>
+    {% if user.role != "admin" %}Pemilik akun: {{ user.nama }} ({{ user.no_hp }})<br>{% endif %}
+    Periode: {{ dari.strftime("%d-%m-%Y") }} s.d. {{ sampai.strftime("%d-%m-%Y") }}
+  </p>
+
+  <div class="gulir">
+  <table>
+    <thead>
+      <tr>
+        <th>{{ kolom }}</th>
+        <th class="kanan">Jumlah transaksi</th>
+        <th class="kanan">Nominal</th>
+        <th class="kanan">Biaya admin</th>
+        <th class="kanan">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for baris in data %}
+      <tr>
+        <td>{{ baris.nama }}</td>
+        <td class="kanan">{{ baris.jumlah }}</td>
+        <td class="kanan">{{ baris.nominal|rupiah }}</td>
+        <td class="kanan">{{ baris.biaya_admin|rupiah }}</td>
+        <td class="kanan">{{ baris.total|rupiah }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="kecil">Tidak ada pembayaran layanan pada periode ini.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if data %}
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td class="kanan">{{ data|sum(attribute="jumlah") }}</td>
+        <td class="kanan">{{ data|sum(attribute="nominal")|rupiah }}</td>
+        <td class="kanan">{{ data|sum(attribute="biaya_admin")|rupiah }}</td>
+        <td class="kanan">{{ data|sum(attribute="total")|rupiah }}</td>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+  </div>
+</div>
+{% endblock %}

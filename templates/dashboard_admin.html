@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block judul %}Dashboard Admin{% endblock %}
+
+{% block isi %}
+<h1>Dashboard Admin</h1>
+
+<div class="kartu deret-angka">
+  <div>
+    <div class="kecil">Pengguna aktif</div>
+    <div class="angka">{{ angka.jumlah_pengguna }}</div>
+  </div>
+  <div>
+    <div class="kecil">Total saldo pengguna</div>
+    <div class="angka">{{ angka.total_saldo|rupiah }}</div>
+  </div>
+  <div>
+    <div class="kecil">Transaksi hari ini</div>
+    <div class="angka">{{ angka.transaksi_hari_ini }}</div>
+  </div>
+  <div>
+    <div class="kecil">Nilai transaksi bulan ini</div>
+    <div class="angka">{{ angka.nilai_bulan_ini|rupiah }}</div>
+  </div>
+  <div>
+    <div class="kecil">Biaya admin bulan ini</div>
+    <div class="angka hijau">{{ angka.biaya_admin_bulan_ini|rupiah }}</div>
+  </div>
+</div>
+
+<div class="kartu">
+  <h2>Layanan terlaris bulan ini</h2>
+  {% if terlaris %}
+  <table>
+    <tr><th>Layanan</th><th class="kanan">Jumlah transaksi</th><th class="kanan">Total nominal</th></tr>
+    {% for l in terlaris %}
+    <tr>
+      <td>{{ l.nama_layanan }}</td>
+      <td class="kanan">{{ l.jumlah }}</td>
+      <td class="kanan">{{ l.total|rupiah }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p class="kecil">Belum ada pembayaran layanan bulan ini.</p>
+  {% endif %}
+</div>
+
+<div class="kartu">
+  <h2>Transaksi terbaru</h2>
+  {% if terbaru %}
+  <div class="gulir">
+  <table>
+    <tr><th>Waktu dan kode</th><th>Pengguna</th><th>Keterangan</th><th class="kanan">Nominal</th></tr>
+    {% for t in terbaru %}
+    <tr>
+      <td class="rapat">{{ t.waktu|tanggal }}<div class="kecil">{{ t.id|kode }}</div></td>
+      <td>{{ t.nama_pengguna }}</td>
+      <td>{{ t|keterangan }}</td>
+      <td class="kanan">{{ t.nominal|rupiah }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  <p><a href="/laporan/mutasi">Lihat laporan transaksi</a></p>
+  {% else %}
+    <p class="kecil">Belum ada transaksi.</p>
+  {% endif %}
+</div>
+{% endblock %}

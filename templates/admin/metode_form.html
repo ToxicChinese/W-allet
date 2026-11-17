@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block judul %}{{ "Edit" if item else "Tambah" }} Metode Isi Saldo{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>{{ "Edit" if item else "Tambah" }} Metode Isi Saldo</h1>
+
+  <form action="{{ '/admin/metode/%d/edit' % item.id if item else '/admin/metode/tambah' }}" method="post">
+    <label for="nama_metode">Nama metode</label>
+    <input id="nama_metode" name="nama_metode" value="{{ item.nama_metode if item }}" maxlength="50" required autofocus>
+
+    <label for="keterangan">Keterangan</label>
+    <input id="keterangan" name="keterangan" value="{{ item.keterangan if item }}" maxlength="200">
+
+    {% if item %}
+    <label class="centang">
+      <input type="checkbox" name="aktif" {% if item.aktif %}checked{% endif %}>
+      Aktif (bisa dipilih pengguna saat isi saldo)
+    </label>
+    {% endif %}
+
+    <div class="tombol-form">
+      <button class="tombol">Simpan</button>
+      <a class="tombol abu" href="/admin/metode">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

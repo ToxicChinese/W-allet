@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block judul %}Profil{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>Profil</h1>
+
+  <form action="/profil" method="post">
+    <label>Email</label>
+    <input value="{{ user.email }}" disabled>
+
+    <label for="nama">Nama lengkap</label>
+    <input id="nama" name="nama" value="{{ user.nama }}" minlength="3" maxlength="100" required>
+
+    <label for="no_hp">Nomor HP</label>
+    <input id="no_hp" name="no_hp" value="{{ user.no_hp }}" maxlength="15" required>
+
+    <h2 style="margin-top: 24px">Ganti password</h2>
+    <div class="kecil">Kosongkan tiga kolom di bawah kalau password tidak diganti.</div>
+
+    <label for="password_lama">Password lama</label>
+    <input type="password" id="password_lama" name="password_lama">
+
+    <label for="password_baru">Password baru</label>
+    <input type="password" id="password_baru" name="password_baru" minlength="6" maxlength="50">
+
+    <label for="ulangi">Ulangi password baru</label>
+    <input type="password" id="ulangi" name="ulangi" minlength="6" maxlength="50">
+
+    <div class="tombol-form">
+      <button class="tombol">Simpan</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

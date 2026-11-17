@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block judul %}Dashboard{% endblock %}
+
+{% block isi %}
+<section class="saldo">
+  <div>
+    <div class="kecil">Saldo {{ user.nama }}</div>
+    <div class="angka-besar">{{ user.saldo|rupiah }}</div>
+    <div class="kecil">Nomor akun {{ user.no_hp }}</div>
+  </div>
+  <div class="aksi">
+    <a class="tombol terang" href="/topup">Isi Saldo</a>
+    <a class="tombol tembus" href="/kirim">Kirim</a>
+    <a class="tombol tembus" href="/bayar">Bayar</a>
+  </div>
+</section>
+
+<div class="baris">
+  <section class="kartu">
+    <h2>Bulan ini</h2>
+    <div class="dua-angka">
+      <div>
+        <div class="kecil">Uang masuk</div>
+        <div class="angka hijau">{{ ringkasan.masuk|rupiah }}</div>
+      </div>
+      <div>
+        <div class="kecil">Uang keluar</div>
+        <div class="angka">{{ ringkasan.keluar|rupiah }}</div>
+      </div>
+    </div>
+
+    <h3>Pengeluaran per kategori</h3>
+    {% for k in per_kategori %}
+      <div class="batang-label">
+        <span>{{ k.nama_kategori }}</span>
+        <span class="jumlah">{{ k.total|rupiah }}</span>
+      </div>
+      <div class="batang"><div style="width: {{ k.persen }}%"></div></div>
+    {% else %}
+      <p class="kecil">Belum ada pembayaran bulan ini.</p>
+    {% endfor %}
+  </section>
+
+  <section class="kartu">
+    <h2>Transaksi terakhir</h2>
+    {% if terbaru %}
+    <ul class="daftar-transaksi">
+      {% for t in terbaru %}
+      <li>
+        <span class="tanda {{ 'masuk' if t.masuk }}" aria-hidden="true">{{ "+" if t.masuk else "−" }}</span>
+        <span class="rincian">
+          {{ t|keterangan }}
+          <span class="kecil">{{ t.waktu|tanggal }}</span>
+        </span>
+        <span class="jumlah {{ 'hijau' if t.masuk }}">{{ "+" if t.masuk else "−" }}{{ (t.masuk or t.keluar)|rupiah }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    <a href="/laporan/mutasi">Lihat semua mutasi</a>
+    {% else %}
+      <p class="kecil">Belum ada transaksi. Mulai dengan isi saldo.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

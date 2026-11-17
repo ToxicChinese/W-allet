@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block judul %}Kirim Saldo{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>Kirim Saldo</h1>
+  <p class="kecil">Saldo sekarang: {{ user.saldo|rupiah }}</p>
+
+  <form action="/kirim" method="post">
+    <label for="no_hp">Nomor HP penerima</label>
+    <input id="no_hp" name="no_hp" placeholder="08xxxxxxxxxx" maxlength="15" required>
+
+    <label for="nominal">Nominal (Rp)</label>
+    <input type="number" id="nominal" name="nominal" min="{{ batas[0] }}" max="{{ batas[1] }}" required>
+    <div class="kecil">Minimal {{ batas[0]|rupiah }}, maksimal {{ batas[1]|rupiah }}. Tanpa biaya admin.</div>
+
+    <label for="catatan">Catatan (boleh kosong)</label>
+    <input id="catatan" name="catatan" maxlength="100">
+
+    <div class="tombol-form">
+      <button class="tombol">Kirim</button>
+      <a class="tombol abu" href="/">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

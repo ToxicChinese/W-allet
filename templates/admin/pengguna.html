@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block judul %}Pengguna{% endblock %}
+
+{% block isi %}
+<h1>Master Pengguna</h1>
+
+<div class="kartu">
+  <form action="/admin/pengguna" method="get" class="saring">
+    <div>
+      <label for="q">Cari nama, email, atau nomor HP</label>
+      <input id="q" name="q" value="{{ q }}">
+    </div>
+    <button class="tombol">Cari</button>
+    {% if q %}<a class="tombol abu" href="/admin/pengguna">Hapus pencarian</a>{% endif %}
+  </form>
+</div>
+
+<div class="kartu gulir">
+  <table>
+    <tr>
+      <th>Nama dan email</th><th>Nomor HP</th><th>Peran</th>
+      <th class="kanan">Saldo</th><th>Status</th><th>Terdaftar</th><th>Aksi</th>
+    </tr>
+    {% for p in data %}
+    <tr>
+      <td class="rapat">{{ p.nama }}<div class="kecil">{{ p.email }}</div></td>
+      <td>{{ p.no_hp }}</td>
+      <td><span class="lencana">{{ p.role }}</span></td>
+      <td class="kanan">{{ p.saldo|rupiah }}</td>
+      <td>
+        {% if p.aktif %}<span class="lencana ya">Aktif</span>
+        {% else %}<span class="lencana tidak">Nonaktif</span>{% endif %}
+      </td>
+      <td class="rapat">{{ p.dibuat_pada|tanggal }}</td>
+      <td>
+        <div class="aksi-baris">
+          <a class="tombol abu mini" href="/admin/pengguna/{{ p.id }}/edit">Edit</a>
+          {% if p.id != user.id %}
+          <form action="/admin/pengguna/{{ p.id }}/hapus" method="post" data-nama="{{ p.nama }}"
+                onsubmit="return confirm('Hapus pengguna ' + this.dataset.nama + '?')">
+            <button class="tombol bahaya mini">Hapus</button>
+          </form>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="kecil">Tidak ada pengguna yang cocok.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<p class="kecil">Pengguna baru dibuat lewat halaman Daftar. Pengguna yang sudah punya transaksi tidak bisa dihapus, hanya dinonaktifkan.</p>
+{% endblock %}

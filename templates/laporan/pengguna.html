@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block judul %}Laporan Pengguna{% endblock %}
+
+{% block isi %}
+<div class="judul-halaman">
+  <h1>Laporan Pengguna</h1>
+  <button type="button" class="tombol abu tidak-dicetak" onclick="window.print()">Cetak / PDF</button>
+</div>
+
+<div class="kartu">
+  <p>
+    <strong>{{ NAMA_APLIKASI }}</strong><br>
+    Keadaan per {{ dicetak|tanggal }} WIB
+  </p>
+
+  <div class="gulir">
+  <table>
+    <thead>
+      <tr>
+        <th>Nama dan email</th><th>Nomor HP</th><th>Terdaftar</th><th>Status</th>
+        <th class="kanan">Jumlah transaksi</th><th class="kanan">Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in data %}
+      <tr>
+        <td class="rapat">{{ p.nama }}<div class="kecil">{{ p.email }}</div></td>
+        <td>{{ p.no_hp }}</td>
+        <td class="rapat">{{ p.dibuat_pada|tanggal }}</td>
+        <td>{{ "Aktif" if p.aktif else "Nonaktif" }}</td>
+        <td class="kanan">{{ p.jumlah_transaksi }}</td>
+        <td class="kanan">{{ p.saldo|rupiah }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="kecil">Belum ada pengguna.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if data %}
+    <tfoot>
+      <tr>
+        <td colspan="5">Total saldo {{ data|length }} pengguna</td>
+        <td class="kanan">{{ total_saldo|rupiah }}</td>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+  </div>
+</div>
+{% endblock %}

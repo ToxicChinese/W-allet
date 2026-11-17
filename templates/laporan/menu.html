@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block judul %}Laporan{% endblock %}
+
+{% block isi %}
+<h1>Laporan</h1>
+
+<div class="baris menu-laporan">
+  <a class="kartu" href="/laporan/mutasi">
+    <h2>{{ "Laporan Transaksi" if user.role == "admin" else "Mutasi Saldo" }}</h2>
+    <div class="kecil">Daftar transaksi per periode, lengkap dengan uang masuk, uang keluar, dan saldo akhir.</div>
+  </a>
+  <a class="kartu" href="/laporan/kategori">
+    <h2>Rekap per Kategori</h2>
+    <div class="kecil">Total pembayaran layanan yang dikelompokkan per kategori.</div>
+  </a>
+  {% if user.role == "admin" %}
+  <a class="kartu" href="/laporan/layanan">
+    <h2>Rekap per Layanan</h2>
+    <div class="kecil">Jumlah transaksi, nominal, dan pendapatan biaya admin tiap layanan.</div>
+  </a>
+  <a class="kartu" href="/laporan/pengguna">
+    <h2>Laporan Pengguna</h2>
+    <div class="kecil">Daftar pengguna beserta saldo dan jumlah transaksinya.</div>
+  </a>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block judul %}{{ "Edit" if item else "Tambah" }} Kategori{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>{{ "Edit" if item else "Tambah" }} Kategori</h1>
+
+  <form action="{{ '/admin/kategori/%d/edit' % item.id if item else '/admin/kategori/tambah' }}" method="post">
+    <label for="nama_kategori">Nama kategori</label>
+    <input id="nama_kategori" name="nama_kategori" value="{{ item.nama_kategori if item }}" maxlength="50" required autofocus>
+
+    <label for="deskripsi">Deskripsi</label>
+    <input id="deskripsi" name="deskripsi" value="{{ item.deskripsi if item }}" maxlength="200">
+
+    <div class="tombol-form">
+      <button class="tombol">Simpan</button>
+      <a class="tombol abu" href="/admin/kategori">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block judul %}Bayar Layanan{% endblock %}
+{% block lebar %}sempit{% endblock %}
+
+{% block isi %}
+<div class="kartu">
+  <h1>Bayar Layanan</h1>
+  <p class="kecil">Saldo sekarang: {{ user.saldo|rupiah }}</p>
+
+  <form action="/bayar" method="post">
+    <label for="layanan_id">Layanan</label>
+    <select id="layanan_id" name="layanan_id" required>
+      <option value="" disabled selected>Pilih layanan</option>
+      {% for nama_kategori, daftar in layanan|groupby("nama_kategori") %}
+        <optgroup label="{{ nama_kategori }}">
+          {% for l in daftar %}
+            <option value="{{ l.id }}">
+              {{ l.nama_layanan }}{% if l.biaya_admin %} (biaya admin {{ l.biaya_admin|rupiah }}){% endif %}
+            </option>
+          {% endfor %}
+        </optgroup>
+      {% endfor %}
+    </select>
+
+    <label for="nomor_tujuan">Nomor HP atau ID pelanggan (boleh kosong)</label>
+    <input id="nomor_tujuan" name="nomor_tujuan" maxlength="30">
+
+    <label for="nominal">Nominal (Rp)</label>
+    <input type="number" id="nominal" name="nominal" min="{{ batas[0] }}" max="{{ batas[1] }}" required>
+    <div class="kecil">Saldo dipotong sebesar nominal ditambah biaya admin layanan.</div>
+
+    <label for="catatan">Catatan (boleh kosong)</label>
+    <input id="catatan" name="catatan" maxlength="100">
+
+    <div class="tombol-form">
+      <button class="tombol">Bayar</button>
+      <a class="tombol abu" href="/">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
